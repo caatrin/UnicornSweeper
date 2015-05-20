@@ -9,37 +9,57 @@ import android.widget.Button;
  */
 public class Tile extends Button {
 
-    public final static int TILE_NUMBER = 0;
-    public final static int TILE_MINE = 1;
-
-    private int mTileType;
-    private int mSurroundingMines;
+    private boolean isMine;
+    private boolean isFlag;
+    private boolean isExposed;
+    private boolean hasWon;
 
     public Tile(Context context) {
         super(context);
-        this.setWidth(20);
-        this.setHeight(20);
+        setDefault();
     }
 
     public Tile(Context context, AttributeSet attrs) {
         super(context, attrs);
-        this.setWidth(30);
-        this.setHeight(30);
+        setDefault();
     }
 
-    public int getTileType() {
-        return mTileType;
+    private void setDefault() {
+        this.isMine = false;
+        this.isFlag = false;
+        this.isExposed = false;
     }
 
-    public void setTileType(int mTileType) {
-        this.mTileType = mTileType;
+
+    public boolean isMine() {
+        return isMine;
     }
 
-    public int getSurroundingMines() {
-        return mSurroundingMines;
+    public void setIsMine(boolean isMine) {
+        this.isMine = isMine;
     }
 
-    public void setSurroundingMines(int mSurroundingMines) {
-        this.mSurroundingMines = mSurroundingMines;
+    public boolean isFlag() {
+        return isFlag;
+    }
+
+    public void setIsFlag(boolean isFlag) {
+        this.isFlag = isFlag;
+    }
+
+    public boolean isExposed() {
+        return isExposed;
+    }
+
+    public void setIsExposed(boolean isExposed) {
+        this.isExposed = isExposed;
+    }
+
+    public boolean hasWon() {
+        return hasWon;
+    }
+
+    public void setHasWon(boolean hasWon) {
+        this.hasWon = hasWon;
     }
 }

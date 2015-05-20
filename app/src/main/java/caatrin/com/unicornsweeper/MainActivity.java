@@ -14,6 +14,7 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import caatrin.com.unicornsweeper.model.Game;
 import caatrin.com.unicornsweeper.views.Tile;
 
 
@@ -21,20 +22,16 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
     public boolean isGameOver = false;
 
-    private Tile mTileTable[][];        //Array of Buttons
-    private boolean mBomb[][];          //array true if bomb is present on button [x][y]
-    private boolean mFlag[][];          //array true if flag is present at button [x][y]
-    private boolean mExposed[][];       //used for exposing 0's. If true then a 0 has been exposed
-    private boolean mCheckwinbool[][];  // if [x][y] = true then the button has a number on it or it is a bomb (used for checking if game is over)
-    private int mCount = 0;
+    //private Tile mTileTable[][];        //Array of Buttons
+    private Game game;
     private int mBombsremaining;        //counting the number of bombs placed
     private String mSurbombs;           //number of bombs surrounding button [x][y] (is a string so that we can setLabel for the button)
-    private int mRandx, mRandy;         //random ints for bombs
+
     private int mRow = 8, mCol = 8;   //number of rows columns,
-    private int mNumbombs = 10, Setup = 3; //number of rows columns, and bombs
+    private int mNumbombs = 10;     //number of rows columns, and bombs
 
     private Button easyBtn, mediumBtn, hardBtn;
-    private TextView mGombsTextView;
+    private TextView mBombsTextView;
     private TextView mGameStatusTextView;
     private TableLayout mMineGridLayout;
 
@@ -90,20 +87,16 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         mediumBtn.setOnClickListener(this);
         hardBtn = (Button) findViewById(R.id.hardBtn);
         hardBtn.setOnClickListener(this);
-        mGombsTextView = (TextView) findViewById(R.id.bombsTextView);
+        mBombsTextView = (TextView) findViewById(R.id.bombsTextView);
         mGameStatusTextView = (TextView) findViewById(R.id.gameStatusTextView);
 
-        mTileTable = new Tile[mRow][mCol];
-        mBomb = new boolean[mRow][mCol];
-        mFlag = new boolean[mRow][mCol];
-        mExposed = new boolean[mRow][mCol];
-        mCheckwinbool = new boolean[mRow][mCol];
+        //mTileTable = new Tile[mRow][mCol];
+        game = new Game(mRow, mCol);
     }
 
     private void restartGame(int row, int col, int numbombs) {
-        int count = 0;
         mBombsremaining = mNumbombs;
-        mGombsTextView.setText(String.valueOf(mBombsremaining));
+        mBombsTextView.setText(String.valueOf(mBombsremaining));
         mGameStatusTextView.setText("Game started, good luck!");
 
         mMineGridLayout.removeAllViews();
@@ -114,21 +107,23 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
             for (int y = 0; y < mCol; y++) {
                 final int cursorX = x;
                 final int cursorY = y;
-                mTileTable[x][y] = new Tile(this);
-                mTileTable[x][y].setOnClickListener(new View.OnClickListener() {
+                game.setTile(x, y, this);
+                //mTileTable[x][y] = new Tile(this);
+                final Tile tile = game.getTile(x, y);
+                game.getTile(x, y).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (mFlag[cursorX][cursorY] == false) { //if left click, and there is no flag on the button
-                            if (mBomb[cursorX][cursorY] == true) { // if you you click on a bomb, results in game over
-                                mTileTable[cursorX][cursorY].setText("*");
+                        if (tile.isFlag() == false) { //if left click, and there is no flag on the button
+                            if (tile.isMine() == true) { // if you you click on a bomb, results in game over
+                                tile.setText("*");
                                 gameover();
                                 mGameStatusTextView.setText("You lost! :(");
                                 isGameOver = true;
                             } else {
-                                mExposed[cursorX][cursorY] = true;
-                                mCheckwinbool[cursorX][cursorY] = true; // these set to true mean that the button has been clicked
+                                tile.setIsExposed(true);
+                                tile.setHasWon(true); // these set to true mean that the button has been clicked
                                 mSurbombs = Integer.toString(getSurroundingBombs(cursorX, cursorY)); //gets the number of surrounding buttons with bombs and sets it to a string so that it is possible to setLabel
-                                mTileTable[cursorX][cursorY].setText(String.valueOf(mSurbombs)); // sets the label to be the number of bombs in the 8 surrounding buttons
+                                tile.setText(String.valueOf(mSurbombs)); // sets the label to be the number of bombs in the 8 surrounding buttons
                                 if (getSurroundingBombs(cursorX, cursorY) == 0) {
                                     //calls a recursive method so that if a "0" is there the surrounding 8
                                     // buttons must be exposed and if one of those is "0" it too must be exposed and so on
@@ -140,45 +135,55 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                     }
                 });
 
-                mTileTable[x][y].setOnLongClickListener(new View.OnLongClickListener() {
+                tile.setOnLongClickListener(new View.OnLongClickListener() {
                     @Override
                     public boolean onLongClick(View v) {
                         //if there is a flag already present set it so that there is no flag
-                        if (mFlag[cursorX][cursorY] == true) {
-                            mTileTable[cursorX][cursorY].setText("");
-                            mFlag[cursorX][cursorY] = false;
-                            mCheckwinbool[cursorX][cursorY] = false;
+                        if (tile.isFlag() == true) {
+                            tile.setText("");
+                            tile.setIsFlag(false);
+                            tile.setHasWon(false);
                             mBombsremaining++;
                             //if there is no flag, set it so there is a flag
-                        } else if (mCheckwinbool[cursorX][cursorY] == false || mBomb[cursorX][cursorY] == true) {
-                            mTileTable[cursorX][cursorY].setText("|>");
-                            mFlag[cursorX][cursorY] = true;
-                            mCheckwinbool[cursorX][cursorY] = true;
+                        } else if (tile.hasWon() == false || tile.isMine() == true) {
+                            tile.setText("|>");
+                            tile.setIsFlag(true);
+                            tile.setHasWon(true);
                             mBombsremaining--;
                         }
-                        mGombsTextView.setText(Integer.toString(mBombsremaining));
+                        mBombsTextView.setText(Integer.toString(mBombsremaining));
                         return true;
                     }
                 });
 
-                mTileTable[x][y].setMinimumWidth(0);
-                mTileTable[x][y].setWidth(90);
-                mBomb[x][y] = false;
-                mFlag[x][y] = false;
-                mExposed[x][y] = false;
-                mCheckwinbool[x][y] = false;
-                tableRow.addView(mTileTable[x][y]);
+                tile.setMinimumWidth(0);
+                tile.setWidth(90);
+                tile.setHasWon(false);
+                tableRow.addView(tile);
             }
             mMineGridLayout.addView(tableRow);
         }
 
-        //adds the bombs to random places on the grid
+
+        plantBombs(game.getTileTable(), numbombs, row, col);
+    }
+
+    /**
+     * Adds the bombs to random places on the grid
+     * @param tile
+     * @param numbombs
+     * @param row
+     * @param col
+     */
+    private void plantBombs(Tile[][] tile, int numbombs, int row, int col) {
+        int count = 0;
+        int randx, randy;         //random ints for bombs
         while (count < numbombs) {
-            mRandx = (int) (Math.random() * (row));
-            mRandy = (int) (Math.random() * (col));
-            if (mBomb[mRandx][mRandy] == false) {
-                mBomb[mRandx][mRandy] = true;
-                mCheckwinbool[mRandx][mRandy] = true;
+            randx = (int) (Math.random() * (row));
+            randy = (int) (Math.random() * (col));
+            if (tile[randx][randy].isMine() == false) {
+                tile[randx][randy].setIsMine(true);
+                tile[randx][randy].setHasWon(true);
                 count++;
             }
         }
@@ -200,7 +205,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                     if (q < 0 || w < 0 || q >= mRow || w >= mCol) {
                         break;
                     }
-                    if (mBomb[q][w] == true) {
+                    if (game.getTile(q, w).isMine() == true) {
                         surBombs++;
                     }
                     break;
@@ -217,7 +222,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
      */
     public void exposeSurroundingTiles(int x, int y) {
         String surrbombs;
-        mExposed[x][y] = true;
+        game.getTile(x, y).setIsExposed(true);
         for (int q = x - 1; q <= x + 1; q++) {
             for (int w = y - 1; w <= y + 1; w++) {
                 while (true) {
@@ -225,13 +230,13 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                     {
                         break;
                     }
-                    if (mFlag[q][w] == true) {
+                    if (game.getTile(q, w).isFlag() == true) {
                         break;
                     }
 
-                    mCheckwinbool[q][w] = true;
+                    game.getTile(q, w).setHasWon(true);
                     surrbombs = Integer.toString(getSurroundingBombs(q, w));
-                    mTileTable[q][w].setText(String.valueOf(surrbombs));
+                    game.getTile(q, w).setText(String.valueOf(surrbombs));
                     break;
 
                 }
@@ -253,10 +258,10 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                     {
                         break;
                     }
-                    if (mFlag[q][w] == true) {
+                    if (game.getTile(q, w).isFlag() == true) {
                         break;
                     }
-                    if (mExposed[q][w] == false && getSurroundingBombs(q, w) == 0) {
+                    if (game.getTile(q, w).isExposed() == false && getSurroundingBombs(q, w) == 0) {
                         exposeSurroundingTiles(q, w);
                         check(q, w);
                     }
@@ -283,10 +288,11 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         boolean allexposed = true;
         for (int x = 0; x < mRow; x++) {
             for (int y = 0; y < mRow; y++) {
-                if (mFlag[x][y] == true && mBomb[x][y] == false) {
+                if (game.getTile(x, y).isFlag() == true && game.getTile(x, y).isMine() == false) {
+                //if (mFlag[x][y] == true && mBomb[x][y] == false) {
                     allexposed = false;
                 }
-                if (mCheckwinbool[x][y] == false) {
+                if (game.getTile(x, y).hasWon() == false) {
                     allexposed = false;
                     break;
                 }
@@ -304,10 +310,10 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     private void gameover() {
         for (int x = 0; x < mRow; x++) {
             for (int y = 0; y < mCol; y++) {
-                if (mBomb[x][y] == true) {
-                    mTileTable[x][y].setText("*"); //exposes all bombs
+                if (game.getTile(x, y).isMine() == true) {
+                    game.getTile(x, y).setText("*"); //exposes all bombs
                 }
-                mTileTable[x][y].setEnabled(false); //disable all buttons
+                game.getTile(x, y).setEnabled(false); //disable all buttons
             }
         }
     }
