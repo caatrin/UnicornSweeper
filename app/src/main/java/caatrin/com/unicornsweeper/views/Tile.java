@@ -13,6 +13,7 @@ public class Tile extends Button {
     private boolean isFlag;
     private boolean isExposed;
     private boolean hasWon;
+    private String numSuroungingBombs;
 
     public Tile(Context context) {
         super(context);
@@ -62,4 +63,13 @@ public class Tile extends Button {
     public void setHasWon(boolean hasWon) {
         this.hasWon = hasWon;
     }
+
+    public String getSuroungingBombs() {
+        return numSuroungingBombs;
+    }
+
+    public void setSuroungingBombs(String numSuroungingBombs) {
+        this.numSuroungingBombs = numSuroungingBombs;
+    }
+
 }
