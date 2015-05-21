@@ -4,6 +4,8 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.Button;
 
+import caatrin.com.unicornsweeper.R;
+
 /**
  * Created by caatrin on 05/17/2015.
  */
@@ -29,6 +31,7 @@ public class Tile extends Button {
         this.isMine = false;
         this.isFlag = false;
         this.isExposed = false;
+        this.setBackgroundColor(getResources().getColor(R.color.red));
     }
 
 
