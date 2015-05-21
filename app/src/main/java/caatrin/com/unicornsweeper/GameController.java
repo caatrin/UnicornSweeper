@@ -23,9 +23,18 @@ public class GameController {
     private OnGameChangeListener mOnGameChangedListener;
     private Activity activity;
 
-    public GameController(Activity activity, OnGameChangeListener mOnGameChangedListener) {
+    private static GameController gameController = null;
+
+    private  GameController(Activity activity, OnGameChangeListener mOnGameChangedListener) {
         this.activity = activity;
         this.mOnGameChangedListener = mOnGameChangedListener;
+    }
+
+    public static GameController getInstance(Activity activity, OnGameChangeListener mOnGameChangedListener) {
+        if(gameController == null) {
+            gameController = new GameController(activity, mOnGameChangedListener);
+        }
+        return gameController;
     }
 
     public Game getGame() {

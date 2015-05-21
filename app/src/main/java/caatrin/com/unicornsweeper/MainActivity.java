@@ -34,7 +34,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
         initMineGrid();
 
-        gameController = new GameController(this, this);
+        gameController = GameController.getInstance(this, this);
         gameController.createGame(GameFactory.GAME_EASY);
 
         gameController.restartGame(mMineGridLayout);
