@@ -57,9 +57,6 @@ public class GameController {
                 final int cursorY = y;
                 board.setTile(x, y, activity);
                 final Tile tile = board.getTile(x, y);
-
-                tile.setMinimumWidth(0);
-                tile.setWidth(90);
                 tile.setHasWon(false);
                 tile.setOnClickListener(new View.OnClickListener() {
                     @Override

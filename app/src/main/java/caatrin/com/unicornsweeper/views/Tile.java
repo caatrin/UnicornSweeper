@@ -1,8 +1,11 @@
 package caatrin.com.unicornsweeper.views;
 
 import android.content.Context;
+import android.graphics.PorterDuff;
 import android.util.AttributeSet;
 import android.widget.Button;
+
+import com.beardedhen.androidbootstrap.BootstrapButton;
 
 import caatrin.com.unicornsweeper.R;
 
@@ -31,7 +34,10 @@ public class Tile extends Button {
         this.isMine = false;
         this.isFlag = false;
         this.isExposed = false;
-        this.setBackgroundColor(getResources().getColor(R.color.red));
+        this.setMinimumWidth(0);
+        this.setWidth(90);
+        this.getBackground().setColorFilter(getResources().getColor(R.color.red), PorterDuff.Mode.SRC_IN);
+       // this.setBackgroundColor(getResources().getColor(R.color.red));
     }
 
 
