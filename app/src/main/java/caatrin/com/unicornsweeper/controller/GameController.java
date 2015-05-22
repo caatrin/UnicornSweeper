@@ -1,4 +1,4 @@
-package caatrin.com.unicornsweeper;
+package caatrin.com.unicornsweeper.controller;
 
 import android.app.Activity;
 import android.view.View;
@@ -108,12 +108,10 @@ public class GameController {
                         return true;
                     }
                 });
-
                 tableRow.addView(tile);
             }
             parent.addView(tableRow);
         }
-
 
         plantBombs(board.getTileTable(), game.getBombs(), game.getRow(), game.getCol());
     }
@@ -243,7 +241,6 @@ public class GameController {
         for (int x = 0; x < game.getRow(); x++) {
             for (int y = 0; y < game.getCol(); y++) {
                 if (board.getTile(x, y).isFlag() == true && board.getTile(x, y).isMine() == false) {
-                    //if (mFlag[x][y] == true && mBomb[x][y] == false) {
                     allexposed = false;
                 }
                 if (board.getTile(x, y).hasWon() == false) {
@@ -258,6 +255,15 @@ public class GameController {
         }
     }
 
+    public void showAllBombs() {
+        Board board = game.getBoard();
+        for (int x = 0; x < game.getRow(); x++) {
+            for (int y = 0; y < game.getCol(); y++) {
+                exposeBomb(board.getTile(x, y));
+            }
+        }
+    }
+
     /**
      * Called  if bomb is clicked or on the double click if flag is not on a bomb
      */
@@ -265,11 +271,18 @@ public class GameController {
         Board board = game.getBoard();
         for (int x = 0; x < game.getRow(); x++) {
             for (int y = 0; y < game.getCol(); y++) {
-                if (board.getTile(x, y).isMine() == true) {
+                /*if (board.getTile(x, y).isMine() == true) {
                     board.getTile(x, y).setText("*"); //exposes all bombs
-                }
+                }*/
+                exposeBomb(board.getTile(x, y));
                 board.getTile(x, y).setEnabled(false); //disable all buttons
             }
+        }
+    }
+
+    private void exposeBomb(Tile tile) {
+        if (tile.isMine() == true) {
+            tile.setText("*"); //exposes all bombs
         }
     }
 

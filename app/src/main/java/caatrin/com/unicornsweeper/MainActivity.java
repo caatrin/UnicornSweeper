@@ -1,30 +1,33 @@
 package caatrin.com.unicornsweeper;
 
+import android.content.Context;
+import android.hardware.Sensor;
+import android.hardware.SensorManager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TableLayout;
-import android.widget.TableRow;
 import android.widget.TextView;
 
-import caatrin.com.unicornsweeper.factory.Game;
+import caatrin.com.unicornsweeper.controller.GameController;
+import caatrin.com.unicornsweeper.controller.OnGameChangeListener;
 import caatrin.com.unicornsweeper.factory.GameFactory;
-import caatrin.com.unicornsweeper.factory.GameFactoryImpl;
-import caatrin.com.unicornsweeper.model.Board;
-import caatrin.com.unicornsweeper.views.Tile;
 
 
 public class MainActivity extends ActionBarActivity implements View.OnClickListener, OnGameChangeListener {
 
-    public boolean isGameOver = false;
     private GameController gameController;
 
     private Button easyBtn, mediumBtn, hardBtn;
     private TextView mBombsTextView;
     private TextView mGameStatusTextView;
     private TableLayout mMineGridLayout;
+
+    private SensorManager mSensorManager;
+    private Sensor mAccelerometer;
+    private ShakeDetector mShakeDetector;
 
 
     @Override
@@ -36,8 +39,46 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
         gameController = GameController.getInstance(this, this);
         gameController.createGame(GameFactory.GAME_EASY);
-
         gameController.restartGame(mMineGridLayout);
+
+        // ShakeDetector initialization
+        mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        mAccelerometer = mSensorManager
+                .getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        mShakeDetector = new ShakeDetector();
+        mShakeDetector.setOnShakeListener(new ShakeDetector.OnShakeListener() {
+
+            @Override
+            public void onShake(int count) {
+                /*
+                 * The following method, "handleShakeEvent(count):" is a stub //
+                 * method you would use to setup whatever you want done once the
+                 * device has been shook.
+                 */
+                handleShakeEvent(count);
+            }
+        });
+
+        mBombsTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                handleShakeEvent(3);
+            }
+        });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        // Add the following line to register the Session Manager Listener onResume
+        mSensorManager.registerListener(mShakeDetector, mAccelerometer,    SensorManager.SENSOR_DELAY_UI);
+    }
+
+    @Override
+    public void onPause() {
+        // Add the following line to unregister the Sensor Manager onPause
+        mSensorManager.unregisterListener(mShakeDetector);
+        super.onPause();
     }
 
     @Override
@@ -59,9 +100,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                 gameController.createGame(GameFactory.GAME_HARD);
                 break;
         }
-
         gameController.restartGame(mMineGridLayout);
-        isGameOver = false;
     }
 
     /**
@@ -77,7 +116,6 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         hardBtn.setOnClickListener(this);
         mBombsTextView = (TextView) findViewById(R.id.bombsTextView);
         mGameStatusTextView = (TextView) findViewById(R.id.gameStatusTextView);
-
     }
 
     @Override
@@ -97,6 +135,13 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         mBombsTextView.setText(status);
     }
 
+    public void handleShakeEvent(int count) {
+        if (count == 3) {
+            gameController.showAllBombs();
+            mGameStatusTextView.setText("Cheater!");
+        }
+
+    }
 
 
 }

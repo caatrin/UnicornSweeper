@@ -1,4 +1,4 @@
-package caatrin.com.unicornsweeper;
+package caatrin.com.unicornsweeper.controller;
 
 /**
  * Created by caatrin on 05/21/2015.
