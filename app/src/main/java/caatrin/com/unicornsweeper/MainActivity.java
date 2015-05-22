@@ -3,6 +3,7 @@ package caatrin.com.unicornsweeper;
 import android.content.Context;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
+import android.os.Vibrator;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -23,6 +24,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     private Button easyBtn, mediumBtn, hardBtn;
     private TextView mBombsTextView;
     private TextView mGameStatusTextView;
+    private TextView mLevelTextView;
     private TableLayout mMineGridLayout;
 
     private SensorManager mSensorManager;
@@ -92,12 +94,15 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         switch (v.getId()) {
             case R.id.easyBtn :
                 gameController.createGame(GameFactory.GAME_EASY);
+                mLevelTextView.setText(GameFactory.GAME_EASY);
                 break;
             case R.id.mediumBtn :
                 gameController.createGame(GameFactory.GAME_MEDIUM);
+                mLevelTextView.setText(GameFactory.GAME_MEDIUM);
                 break;
             case R.id.hardBtn :
                 gameController.createGame(GameFactory.GAME_HARD);
+                mLevelTextView.setText(GameFactory.GAME_HARD);
                 break;
         }
         gameController.restartGame(mMineGridLayout);
@@ -116,6 +121,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         hardBtn.setOnClickListener(this);
         mBombsTextView = (TextView) findViewById(R.id.bombsTextView);
         mGameStatusTextView = (TextView) findViewById(R.id.gameStatusTextView);
+        mLevelTextView = (TextView) findViewById(R.id.levelTextView);
     }
 
     @Override
@@ -139,6 +145,12 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         if (count == 3) {
             gameController.showAllBombs();
             mGameStatusTextView.setText("Cheater!");
+
+            // Get instance of Vibrator from current Context
+            Vibrator mVibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+
+            // Vibrate for 300 milliseconds
+            mVibrator.vibrate(1000);
         }
 
     }

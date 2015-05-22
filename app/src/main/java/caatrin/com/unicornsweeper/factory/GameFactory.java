@@ -5,9 +5,9 @@ package caatrin.com.unicornsweeper.factory;
  */
 public interface GameFactory {
 
-    String GAME_EASY = "easy";
-    String GAME_MEDIUM = "medium";
-    String GAME_HARD = "hard";
+    String GAME_EASY = "Easy";
+    String GAME_MEDIUM = "Medium";
+    String GAME_HARD = "Hard";
 
     Game createGame(String type);
 }
