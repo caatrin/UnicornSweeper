@@ -1,12 +1,14 @@
 package caatrin.com.unicornsweeper;
 
 import android.content.Context;
+import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.os.Vibrator;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TableLayout;
@@ -14,6 +16,7 @@ import android.widget.TextView;
 
 import caatrin.com.unicornsweeper.controller.GameController;
 import caatrin.com.unicornsweeper.controller.OnGameChangeListener;
+import caatrin.com.unicornsweeper.controller.ShakeDetector;
 import caatrin.com.unicornsweeper.factory.GameFactory;
 
 
@@ -73,7 +76,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     public void onResume() {
         super.onResume();
         // Add the following line to register the Session Manager Listener onResume
-        mSensorManager.registerListener(mShakeDetector, mAccelerometer,    SensorManager.SENSOR_DELAY_UI);
+        mSensorManager.registerListener(mShakeDetector, mAccelerometer, SensorManager.SENSOR_DELAY_UI);
     }
 
     @Override
@@ -86,6 +89,24 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        Intent intent;
+        switch (item.getItemId()) {
+            case R.id.action_hints :
+                intent = new Intent(this, HintsActivity.class);
+                this.startActivity(intent);
+                break;
+            case R.id.action_about :
+                intent = new Intent(this, AboutActivity.class);
+                this.startActivity(intent);
+                break;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
         return true;
     }
 

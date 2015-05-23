@@ -1,4 +1,4 @@
-package caatrin.com.unicornsweeper;
+package caatrin.com.unicornsweeper.controller;
 
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
