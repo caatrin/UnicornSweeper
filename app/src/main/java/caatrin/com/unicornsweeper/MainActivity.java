@@ -41,9 +41,10 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        initMineGrid();
+        initGameControlls();
 
-        gameController = GameController.getInstance(this, this);
+        //gameController = GameController.getInstance(this, this);
+        gameController = new GameController(this, this);
         gameController.createGame(GameFactory.GAME_EASY);
         gameController.restartGame(mMineGridLayout);
 
@@ -134,8 +135,9 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     /**
      * Initialize the mine grid with all the views
      */
-    private void initMineGrid() {
+    private void initGameControlls() {
         mMineGridLayout = (TableLayout) findViewById(R.id.mineGridLayout);
+        mMineGridLayout.removeAllViews();
         easyBtn = (Button) findViewById(R.id.easyBtn);
         easyBtn.setOnClickListener(this);
         mediumBtn = (Button) findViewById(R.id.mediumBtn);
@@ -151,7 +153,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     public void setInitialText() {
         mBombsTextView.setText(String.valueOf(gameController.getGame().getBombs()));
         mGameStatusTextView.setText("Game started, good luck!");
-        mMineGridLayout.removeAllViewsInLayout();
+        mMineGridLayout.removeAllViews();
     }
 
     @Override
