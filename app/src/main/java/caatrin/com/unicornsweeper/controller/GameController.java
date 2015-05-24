@@ -16,9 +16,16 @@ import caatrin.com.unicornsweeper.views.Tile;
  */
 public class GameController {
 
+    public static final int GAME_STATUS_DEFAULT = 0;
+    public static final int GAME_STATUS_STARTED = 1;
+    public static final int GAME_STATUS_LOST = 2;
+    public static final int GAME_STATUS_WIN = 3;
+    public static final int GAME_STATUS_CHEATED = 4;
+
+    private int mGameStatus;
+
     private GameFactory gameFactory = new GameFactoryImpl();
     private Game game;
-    public boolean isGameOver = false;
 
     private OnGameChangeListener mOnGameChangedListener;
     private Activity activity;
@@ -48,6 +55,7 @@ public class GameController {
     public void restartGame(TableLayout parent) {
         final Board board = game.getBoard();
         mOnGameChangedListener.setInitialText();
+        mGameStatus = GAME_STATUS_STARTED;
 
         for (int x = 0; x < game.getRow(); x++) {
             TableRow tableRow = new TableRow(activity);
@@ -66,7 +74,7 @@ public class GameController {
                                 tile.setText("*");
                                 gameover();
                                 mOnGameChangedListener.updateGameStatus("You lost! :(");
-                                isGameOver = true;
+                                mGameStatus = GAME_STATUS_LOST;
                             } else {
                                 tile.setIsExposed(true);
                                 tile.setHasWon(true); // these set to true mean that the button has been clicked
@@ -249,16 +257,18 @@ public class GameController {
         if (allexposed) {
             gameover();
             mOnGameChangedListener.updateGameStatus("Yey, you won!");
+            mGameStatus = GAME_STATUS_WIN;
         }
     }
 
-    public void showAllBombs() {
+    public void cheat() {
         Board board = game.getBoard();
         for (int x = 0; x < game.getRow(); x++) {
             for (int y = 0; y < game.getCol(); y++) {
                 exposeBomb(board.getTile(x, y));
             }
         }
+        mGameStatus = GAME_STATUS_CHEATED;
     }
 
     /**
@@ -268,9 +278,6 @@ public class GameController {
         Board board = game.getBoard();
         for (int x = 0; x < game.getRow(); x++) {
             for (int y = 0; y < game.getCol(); y++) {
-                /*if (board.getTile(x, y).isMine() == true) {
-                    board.getTile(x, y).setText("*"); //exposes all bombs
-                }*/
                 exposeBomb(board.getTile(x, y));
                 board.getTile(x, y).setEnabled(false); //disable all buttons
             }

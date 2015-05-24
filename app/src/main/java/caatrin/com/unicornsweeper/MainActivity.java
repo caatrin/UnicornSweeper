@@ -2,6 +2,7 @@ package caatrin.com.unicornsweeper;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.os.Vibrator;
@@ -86,6 +87,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         super.onPause();
     }
 
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
@@ -149,7 +151,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     public void setInitialText() {
         mBombsTextView.setText(String.valueOf(gameController.getGame().getBombs()));
         mGameStatusTextView.setText("Game started, good luck!");
-        mMineGridLayout.removeAllViews();
+        mMineGridLayout.removeAllViewsInLayout();
     }
 
     @Override
@@ -164,7 +166,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
     public void handleShakeEvent(int count) {
         if (count == 3) {
-            gameController.showAllBombs();
+            gameController.cheat();
             mGameStatusTextView.setText("Cheater!");
 
             // Get instance of Vibrator from current Context

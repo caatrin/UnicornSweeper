@@ -12,4 +12,12 @@
     <string name="icon_flag_descript">Long press on a tile to put a flag on it.</string>
     <string name="icon_cheat">Cheat</string>
     <string name="icon_cheat_descript">Shake your device to reveal all the bombs and continue playing.</string>
+
+    <string name="text_about">About</string>
+    <string name="text_about_descript">Unicorn sweeper is a version of the popular minesweeper game but for unicorn lovers.
+        It was developed with much excitement and love to spread the word about the power of unicorns and bring happiness to your day.
+        \n\nPlease enjoy and leave suggestions or ideas that will make this game better, if you have any.
+
+        \n\nLet\'s do the magic!</string>
+
 </resources>
