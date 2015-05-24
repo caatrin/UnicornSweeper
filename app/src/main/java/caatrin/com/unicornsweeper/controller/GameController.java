@@ -16,11 +16,10 @@ import caatrin.com.unicornsweeper.views.Tile;
  */
 public class GameController {
 
-    public static final int GAME_STATUS_DEFAULT = 0;
-    public static final int GAME_STATUS_STARTED = 1;
-    public static final int GAME_STATUS_LOST = 2;
-    public static final int GAME_STATUS_WIN = 3;
-    public static final int GAME_STATUS_CHEATED = 4;
+    public static final int GAME_STATUS_STARTED = 0;
+    public static final int GAME_STATUS_LOST = 1;
+    public static final int GAME_STATUS_WIN = 2;
+    public static final int GAME_STATUS_CHEATED = 3;
 
     private int mGameStatus;
 
@@ -35,6 +34,13 @@ public class GameController {
         this.mOnGameChangedListener = mOnGameChangedListener;
     }
 
+    public int getGameStatus() {
+        return mGameStatus;
+    }
+
+    public void setGameStatus(int mGameStatus) {
+        this.mGameStatus = mGameStatus;
+    }
 
     public Game getGame() {
         return game;

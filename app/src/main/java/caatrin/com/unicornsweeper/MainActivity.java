@@ -41,9 +41,8 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        initGameControlls();
+        initGameControls();
 
-        //gameController = GameController.getInstance(this, this);
         gameController = new GameController(this, this);
         gameController.createGame(GameFactory.GAME_EASY);
         gameController.restartGame(mMineGridLayout);
@@ -135,7 +134,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     /**
      * Initialize the mine grid with all the views
      */
-    private void initGameControlls() {
+    private void initGameControls() {
         mMineGridLayout = (TableLayout) findViewById(R.id.mineGridLayout);
         mMineGridLayout.removeAllViews();
         easyBtn = (Button) findViewById(R.id.easyBtn);
@@ -167,7 +166,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     }
 
     public void handleShakeEvent(int count) {
-        if (count == 3) {
+        if (count == 3 && gameController.getGameStatus() == GameController.GAME_STATUS_STARTED) {
             gameController.cheat();
             mGameStatusTextView.setText("Cheater!");
 
