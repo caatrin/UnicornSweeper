@@ -52,6 +52,7 @@ public class GameController {
 
     public void restartGame(TableLayout parent) {
         final Board board = game.getBoard();
+        int gameDifficulty = game.getRow();
         mOnGameChangedListener.setInitialText();
         mGameStatus = GAME_STATUS_STARTED;
 
@@ -61,7 +62,7 @@ public class GameController {
             for (int y = 0; y < game.getCol(); y++) {
                 final int cursorX = x;
                 final int cursorY = y;
-                board.setTile(x, y, activity);
+                board.setTile(x, y, activity, gameDifficulty);
                 final Tile tile = board.getTile(x, y);
                 tile.setHasWon(false);
                 tile.setOnClickListener(new View.OnClickListener() {
@@ -71,7 +72,7 @@ public class GameController {
                             if (tile.isMine() == true) { // if you you click on a bomb, results in game over
                                 tile.setText("*");
                                 gameover();
-                                mOnGameChangedListener.updateGameStatus("You lost! :(");
+                                mOnGameChangedListener.updateGameStatus("You lost!");
                                 mGameStatus = GAME_STATUS_LOST;
                             } else {
                                 tile.setIsExposed(true);
@@ -81,6 +82,7 @@ public class GameController {
                                 if (getSurroundingBombs(cursorX, cursorY) == 0) {
                                     //calls a recursive method so that if a "0" is there the surrounding 8
                                     // buttons must be exposed and if one of those is "0" it too must be exposed and so on
+                                    tile.setVisibility(View.INVISIBLE);
                                     check(cursorX, cursorY);
                                 }
                             }
@@ -173,7 +175,7 @@ public class GameController {
      * @param y
      */
     public void exposeSurroundingTiles(int x, int y) {
-        String surrbombs;
+        int surrbombs;
         Board board = game.getBoard();
         board.getTile(x, y).setIsExposed(true);
         for (int q = x - 1; q <= x + 1; q++) {
@@ -188,8 +190,12 @@ public class GameController {
                     }
 
                     board.getTile(q, w).setHasWon(true);
-                    surrbombs = Integer.toString(getSurroundingBombs(q, w));
-                    board.getTile(q, w).setText(String.valueOf(surrbombs));
+                    surrbombs = getSurroundingBombs(q, w);
+                    if(surrbombs == 0) {
+                        board.getTile(q, w).setVisibility(View.INVISIBLE);
+                    } else {
+                        board.getTile(q, w).setText(String.valueOf(surrbombs));
+                    }
                     break;
 
                 }
@@ -254,7 +260,7 @@ public class GameController {
         }
         if (allexposed) {
             gameover();
-            mOnGameChangedListener.updateGameStatus("Yey, you won!");
+            mOnGameChangedListener.updateGameStatus("Unicorn, you won!");
             mGameStatus = GAME_STATUS_WIN;
         }
     }

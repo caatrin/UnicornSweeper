@@ -28,8 +28,8 @@ public class Board {
         return tileTable[row][col];
     }
 
-    public void setTile(int row, int col, Context context) {
-        tileTable[row][col] = new Tile(context);
+    public void setTile(int row, int col, Context context, int difficulty) {
+        tileTable[row][col] = new Tile(context, difficulty);
     }
 
     public int getBombsRemaining() {

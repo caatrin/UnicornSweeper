@@ -3,6 +3,7 @@ package caatrin.com.unicornsweeper.views;
 import android.content.Context;
 import android.graphics.PorterDuff;
 import android.util.AttributeSet;
+import android.util.DisplayMetrics;
 import android.widget.Button;
 
 import com.beardedhen.androidbootstrap.BootstrapButton;
@@ -20,24 +21,22 @@ public class Tile extends Button {
     private boolean hasWon;
     private String numSuroungingBombs;
 
-    public Tile(Context context) {
+    public Tile(Context context, int difficulty) {
         super(context);
-        setDefault();
+        setDefault(context, difficulty);
     }
 
-    public Tile(Context context, AttributeSet attrs) {
+    public Tile(Context context, AttributeSet attrs, int difficulty) {
         super(context, attrs);
-        setDefault();
+        setDefault(context, difficulty);
     }
 
-    private void setDefault() {
+    private void setDefault(Context context, int difficulty) {
         this.isMine = false;
         this.isFlag = false;
         this.isExposed = false;
-        this.setMinimumWidth(0);
-        this.setWidth(90);
         this.getBackground().setColorFilter(getResources().getColor(R.color.red), PorterDuff.Mode.SRC_IN);
-       // this.setBackgroundColor(getResources().getColor(R.color.red));
+        setMetrics(context, difficulty);
     }
 
 
@@ -81,4 +80,21 @@ public class Tile extends Button {
         this.numSuroungingBombs = numSuroungingBombs;
     }
 
+
+    private void setMetrics(Context context, int difficulty) {
+        DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
+        float w = displayMetrics.widthPixels/difficulty - 4;
+        int width = (int) w;
+        int defaultWidth = 100;
+
+        if (width >= defaultWidth) {
+            this.setMinimumWidth(defaultWidth);
+            this.setWidth(defaultWidth);
+        }
+        else {
+            this.setMinimumWidth(width);
+            this.setWidth(width);
+        }
+
+    }
 }
