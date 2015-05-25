@@ -5,6 +5,7 @@ import android.view.View;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 
+import caatrin.com.unicornsweeper.R;
 import caatrin.com.unicornsweeper.factory.Game;
 import caatrin.com.unicornsweeper.factory.GameFactory;
 import caatrin.com.unicornsweeper.factory.GameFactoryImpl;
@@ -72,7 +73,7 @@ public class GameController {
                             if (tile.isMine() == true) { // if you you click on a bomb, results in game over
                                 tile.setText("*");
                                 gameover();
-                                mOnGameChangedListener.updateGameStatus("You lost!");
+                                mOnGameChangedListener.updateGameStatus(R.string.game_lost);
                                 mGameStatus = GAME_STATUS_LOST;
                             } else {
                                 tile.setIsExposed(true);
@@ -260,7 +261,7 @@ public class GameController {
         }
         if (allexposed) {
             gameover();
-            mOnGameChangedListener.updateGameStatus("Unicorn, you won!");
+            mOnGameChangedListener.updateGameStatus(R.string.game_won);
             mGameStatus = GAME_STATUS_WIN;
         }
     }

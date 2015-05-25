@@ -151,12 +151,12 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     @Override
     public void setInitialText() {
         mBombsTextView.setText(String.valueOf(gameController.getGame().getBombs()));
-        mGameStatusTextView.setText("Game started, good luck!");
+        mGameStatusTextView.setText(R.string.game_started);
         mMineGridLayout.removeAllViews();
     }
 
     @Override
-    public void updateGameStatus(String status) {
+    public void updateGameStatus(int status) {
         mGameStatusTextView.setText(status);
     }
 
@@ -168,7 +168,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     public void handleShakeEvent(int count) {
         if (count == 3 && gameController.getGameStatus() == GameController.GAME_STATUS_STARTED) {
             gameController.cheat();
-            mGameStatusTextView.setText("Cheater!");
+            mGameStatusTextView.setText(R.string.game_cheat);
 
             // Get instance of Vibrator from current Context
             Vibrator mVibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);

@@ -12,10 +12,10 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_unicorn1"
         android:label="@string/app_name"
-        android:screenOrientation="portrait"
         android:theme="@style/AppTheme" >
         <activity
             android:name=".MainActivity"
+            android:screenOrientation="portrait"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -25,6 +25,7 @@
         </activity>
         <activity
             android:name=".AboutActivity"
+            android:screenOrientation="portrait"
             android:label="@string/title_activity_about" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -32,6 +33,7 @@
         </activity>
         <activity
             android:name=".HintsActivity"
+            android:screenOrientation="portrait"
             android:label="@string/title_activity_hints" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

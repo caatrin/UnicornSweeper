@@ -13,6 +13,11 @@
     <string name="icon_cheat">Cheat</string>
     <string name="icon_cheat_descript">Shake your device to reveal all the bombs and continue playing.</string>
 
+    <string name="game_started">Game started, good luck!</string>
+    <string name="game_won">Unicorn, you won!</string>
+    <string name="game_lost">You lost!</string>
+    <string name="game_cheat">Cheater!</string>
+
     <string name="text_about">About</string>
     <string name="text_about_descript">Unicorn sweeper is a version of the popular minesweeper game but for unicorn lovers.
         It was developed with much excitement and love to spread the word about the power of unicorns and bring happiness to your day.

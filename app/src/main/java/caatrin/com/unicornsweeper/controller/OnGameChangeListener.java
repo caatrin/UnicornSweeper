@@ -6,7 +6,7 @@ package caatrin.com.unicornsweeper.controller;
 public interface OnGameChangeListener {
 
     void setInitialText();
-    void updateGameStatus(String status);
+    void updateGameStatus(int status);
     void updateRemainingBombs(String status);
 
 }

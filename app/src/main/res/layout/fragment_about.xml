@@ -31,6 +31,7 @@
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:layout_gravity="center"
                 android:text="@string/text_about"
+                android:textStyle="bold"
                 android:textAllCaps="true"
                 android:textColor="@color/red"
                 android:id="@+id/aboutTextView"
