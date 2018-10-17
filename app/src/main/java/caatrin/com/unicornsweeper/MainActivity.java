@@ -2,12 +2,11 @@ package caatrin.com.unicornsweeper;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
-import android.os.Vibrator;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.os.Vibrator;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,7 +20,7 @@ import caatrin.com.unicornsweeper.controller.ShakeDetector;
 import caatrin.com.unicornsweeper.factory.GameFactory;
 
 
-public class MainActivity extends ActionBarActivity implements View.OnClickListener, OnGameChangeListener {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, OnGameChangeListener {
 
     private GameController gameController;
 
@@ -49,8 +48,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
         // ShakeDetector initialization
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-        mAccelerometer = mSensorManager
-                .getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         mShakeDetector = new ShakeDetector();
         mShakeDetector.setOnShakeListener(new ShakeDetector.OnShakeListener() {
 
